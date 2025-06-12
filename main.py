@@ -25,6 +25,8 @@ class Player:
     def __init__(self, x, y, health, name, libraryPath):
         self.x = x
         self.y = y
+        self.velocityX = 0
+        self.velocityY = 0
         self.health = health
         self.name = name
         self.libraryPath = libraryPath
