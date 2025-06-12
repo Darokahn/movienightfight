@@ -7,6 +7,13 @@ import types
 JUMPHEIGHT = 20
 VELOCITYPRESERVATION = 0.99
 
+def loadScript(playerName):
+    spec = importlib.util.spec_from_file_location("temp_module", "players/" + playerName + "/script.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+ 
+
 class Hitbox:
     def __init__(self, x, y, width, height, damage, call):
         self.x = x
@@ -33,6 +40,7 @@ class Player:
         self.health = health
         self.name = name
         self.libraryPath = libraryPath
+        self.library = loadScript(name)
         self.currentState = 0
     def jump(self):
         self.velocityY -= JUMPHEIGHT
@@ -42,11 +50,11 @@ class Player:
         self.velocityX *= VELOCITYPRESERVATION
         self.velocityY *= VELOCITYPRESERVATION
     def getSprite(self):
-        return self.stateLibrary[self.currentState].sprite
+        return self.library.sprites[self.currentState]
 
 screen = pygame.display.set_mode((320 * 4, 240 * 4))
 
-p = Player(0, 0, 10, "Liam", "")
+p = Player(0, 0, 10, "liam", "")
 
 stage = pygame.Surface((320, 240))
 
@@ -54,6 +62,8 @@ clock = pygame.time.Clock()
 
 while True:
     clock.tick(30)
+    print("hi")
     stage.fill((0, 0, 0))
     screen.fill((0, 0, 0))
+    screen.blit(p.getSprite(), (0, 0))
     pygame.display.flip()
