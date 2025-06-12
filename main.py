@@ -4,6 +4,9 @@ import json
 import importlib
 import types
 
+JUMPHEIGHT = 20
+VELOCITYPRESERVATION = 0.99
+
 class Hitbox:
     def __init__(self, x, y, width, height, damage, call):
         self.x = x
@@ -31,14 +34,19 @@ class Player:
         self.name = name
         self.libraryPath = libraryPath
         self.currentState = 0
+    def jump(self):
+        self.velocityY -= JUMPHEIGHT
+    def evolve(self):
+        self.y += self.velocityY
+        self.x += self.velocityX
+        self.velocityX *= VELOCITYPRESERVATION
+        self.velocityY *= VELOCITYPRESERVATION
     def getSprite(self):
         return self.stateLibrary[self.currentState].sprite
 
 screen = pygame.display.set_mode((320 * 4, 240 * 4))
 
-s1 = State.fromFile("liam.json")
-
-p = Player(0, 0, 100, {}, [s1], {}, 0)
+p = Player(0, 0, 10, "Liam", "")
 
 stage = pygame.Surface((320, 240))
 
