@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 import pygame
 import json
+import importlib
+import types
 
 class Hitbox:
     def __init__(self, x, y, width, height, damage, call):
@@ -19,32 +21,14 @@ class Hurtbox:
         self.height = height
         self.vulnerability = vulnerability
 
-class State:
-    def __init__(self, hitboxes, hurtboxes, spritepath):
-        self.hitboxes = hitboxes
-        self.hurtboxes = hurtboxes
-        self.spritepath = spritepath
-        self.sprite = pygame.image.load(spritepath)
-    @classmethod
-    def fromFile(cls, path):
-        data = None
-        with open(path, "r") as file:
-            data = json.loads(file.read())
-        for i in range(len(data["hitboxes"])):
-            data["hitboxes"][i] = Hitbox(*data["hitboxes"][i])
-        for i in range(len(data["hurtboxes"])):
-            data["hurtboxes"][i] = Hurtbox(*data["hurtboxes"][i])
-        return cls(**data)
-
-@dataclass
 class Player:
-    x: int
-    y: int
-    health: int
-    events: dict
-    stateLibrary: list
-    scriptLibrary: dict
-    currentState: int
+    def __init__(self, x, y, health, name, libraryPath):
+        self.x = x
+        self.y = y
+        self.health = health
+        self.name = name
+        self.libraryPath = libraryPath
+        self.currentState = 0
     def getSprite(self):
         return self.stateLibrary[self.currentState].sprite
 
