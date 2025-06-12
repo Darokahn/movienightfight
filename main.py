@@ -5,7 +5,8 @@ import importlib
 import types
 
 JUMPHEIGHT = 20
-VELOCITYPRESERVATION = 0.99
+VELOCITYPRESERVATION = 0.90
+GRAVITY = 1
 
 def loadScript(playerName):
     spec = importlib.util.spec_from_file_location("temp_module", "players/" + playerName + "/script.py")
@@ -45,25 +46,32 @@ class Player:
     def jump(self):
         self.velocityY -= JUMPHEIGHT
     def evolve(self):
+        print("hello")
         self.y += self.velocityY
         self.x += self.velocityX
         self.velocityX *= VELOCITYPRESERVATION
         self.velocityY *= VELOCITYPRESERVATION
+        self.doGravity()
     def getSprite(self):
         return self.library.sprites[self.currentState]
+    def doGravity(self):
+        self.velocityY += GRAVITY
 
 screen = pygame.display.set_mode((320 * 4, 240 * 4))
 
-p = Player(0, 0, 10, "liam", "")
+p = Player(0, 160, 10, "liam", "")
 
 stage = pygame.Surface((320, 240))
 
 clock = pygame.time.Clock()
 
+p.jump()
+
 while True:
+    pygame.event.get()
     clock.tick(30)
-    print("hi")
     stage.fill((0, 0, 0))
     screen.fill((0, 0, 0))
-    screen.blit(p.getSprite(), (0, 0))
+    p.evolve()
+    screen.blit(p.getSprite(), (p.x, p.y))
     pygame.display.flip()
