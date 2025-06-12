@@ -50,8 +50,10 @@ p = Player(0, 0, 10, "Liam", "")
 
 stage = pygame.Surface((320, 240))
 
+clock = pygame.time.Clock()
+
 while True:
+    clock.tick(30)
     stage.fill((0, 0, 0))
     screen.fill((0, 0, 0))
-    screen.blit(p.getSprite(), (0, 0))
     pygame.display.flip()
