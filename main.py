@@ -7,7 +7,6 @@ import sys
 import copy
 from pathlib import Path
 
-print(__file__)
 root_dir = Path(__file__).resolve().parent
 sys.path.insert(0, str(root_dir))
 
@@ -62,7 +61,6 @@ class Player:
         hitbox.height *= self.script.aspectRatio[1]
         hitbox.x += self.x
         hitbox.y += self.y
-        print(hitbox.x, hitbox.y, hitbox.width, hitbox.height)
         return hitbox
 
 screen = pygame.display.set_mode((320 * 4, 240 * 4))
@@ -84,5 +82,4 @@ while True:
     screen.fill((0, 0, 0))
     p.evolve()
     screen.blit(p.getSprite(), (p.x, p.y))
-    print(p.getMainHitbox().containsPoint(pygame.mouse.get_pos()))
     pygame.display.flip()
